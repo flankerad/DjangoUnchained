@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Puppy(models.Model):
     '''
         Puppy Model
@@ -17,6 +18,5 @@ class Puppy(models.Model):
     def get_breed(self):
         return self.name + ' belongs to ' + self.breed + ' breed.'
 
-    def  __repr__(self):
+    def __repr__(self):
         return self.name + ' is added. '
-
