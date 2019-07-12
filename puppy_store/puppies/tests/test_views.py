@@ -11,7 +11,7 @@ client = Client()
 class GetAllPuppiesTest(TestCase):
     '''Test module for GET all puppies API'''
 
-    def setup(self):
+    def setUp(self):
         self.casper = Puppy.objects.create(
             name='Casper', age=3, breed='Bull Dog', color='Black')
         self.muffin = Puppy.objects.create(
@@ -35,3 +35,37 @@ class GetAllPuppiesTest(TestCase):
             reverse('get_delete_update_puppy', kwargs={'pk': self.rambo.pk})
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CreateNewPuppyTest(TestCase):
+    ''' Test module to enable new puppy model '''
+
+    def setUp(self):
+        self.valid_payload = {
+            'name': 'Muffin',
+            'age': 4,
+            'breed': 'Pamerion',
+            'color': 'White'
+        }
+        self.invalid_payload = {
+            'name': '',
+            'age': 4,
+            'breed': 'Pamerion',
+            'color': 'White'
+        }
+    
+    def test_create_valid_puppy(self):
+        response = client.post(
+            reverse('get_post_puppies'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_invalid_puppy(self):
+        response = client.post(
+            reverse('get_post_puppies'),
+            data=json.dumps(self.invalid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
